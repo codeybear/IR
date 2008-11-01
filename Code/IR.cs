@@ -133,8 +133,7 @@ namespace ImageSearch
                     ResultList.Add(new Result { File = ThisImage.File, Score = iScore });
             }
 
-            ResultList.Sort(delegate(Result r1, Result r2)
-                { return r1.Score.CompareTo(r2.Score); });
+            ResultList.Sort((r1, r2) => r1.Score.CompareTo(r2.Score));
 
             if(iTop > 0 && iTop < ResultList.Count)
                 ResultList = ResultList.GetRange(0, iTop);

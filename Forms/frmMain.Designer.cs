@@ -68,7 +68,7 @@ namespace ImageSearch
                         | System.Windows.Forms.AnchorStyles.Left)));
             this.imgTest.Location = new System.Drawing.Point(12, 65);
             this.imgTest.Name = "imgTest";
-            this.imgTest.Size = new System.Drawing.Size(128, 165);
+            this.imgTest.Size = new System.Drawing.Size(128, 208);
             this.imgTest.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.imgTest.TabIndex = 0;
             this.imgTest.TabStop = false;
@@ -98,11 +98,11 @@ namespace ImageSearch
             this.Score,
             this.Image,
             this.FileName});
-            this.grdResult.Location = new System.Drawing.Point(351, 36);
+            this.grdResult.Location = new System.Drawing.Point(371, 36);
             this.grdResult.MultiSelect = false;
             this.grdResult.Name = "grdResult";
             this.grdResult.ReadOnly = true;
-            this.grdResult.Size = new System.Drawing.Size(259, 544);
+            this.grdResult.Size = new System.Drawing.Size(259, 587);
             this.grdResult.TabIndex = 5;
             this.grdResult.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grdResult_CellClick);
             // 
@@ -131,9 +131,9 @@ namespace ImageSearch
             this.StatusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ProgressBar,
             this.StatusBarLabel});
-            this.StatusBar.Location = new System.Drawing.Point(0, 595);
+            this.StatusBar.Location = new System.Drawing.Point(0, 638);
             this.StatusBar.Name = "StatusBar";
-            this.StatusBar.Size = new System.Drawing.Size(622, 23);
+            this.StatusBar.Size = new System.Drawing.Size(642, 23);
             this.StatusBar.Stretch = false;
             this.StatusBar.TabIndex = 6;
             // 
@@ -159,7 +159,7 @@ namespace ImageSearch
             this.libraryToolStripMenuItem});
             this.menuMain.Location = new System.Drawing.Point(0, 0);
             this.menuMain.Name = "menuMain";
-            this.menuMain.Size = new System.Drawing.Size(622, 24);
+            this.menuMain.Size = new System.Drawing.Size(642, 24);
             this.menuMain.TabIndex = 7;
             this.menuMain.Text = "menuStrip1";
             // 
@@ -258,8 +258,9 @@ namespace ImageSearch
             this.grdDupes.Name = "grdDupes";
             this.grdDupes.ReadOnly = true;
             this.grdDupes.RowTemplate.DefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.grdDupes.Size = new System.Drawing.Size(301, 515);
+            this.grdDupes.Size = new System.Drawing.Size(301, 558);
             this.grdDupes.TabIndex = 9;
+            this.grdDupes.Visible = false;
             this.grdDupes.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grdDupes_CellClick);
             // 
             // DupeImage
@@ -282,7 +283,7 @@ namespace ImageSearch
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(622, 618);
+            this.ClientSize = new System.Drawing.Size(642, 661);
             this.Controls.Add(this.grdDupes);
             this.Controls.Add(this.btnDupes);
             this.Controls.Add(this.StatusBar);
@@ -290,10 +291,13 @@ namespace ImageSearch
             this.Controls.Add(this.grdResult);
             this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.imgTest);
+            this.KeyPreview = true;
             this.MainMenuStrip = this.menuMain;
             this.Name = "frmMain";
             this.Text = "Image Search";
             this.Load += new System.EventHandler(this.frmMain_Load);
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.frmMain_KeyPress);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.frmMain_KeyDown);
             ((System.ComponentModel.ISupportInitialize)(this.imgTest)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.grdResult)).EndInit();
             this.StatusBar.ResumeLayout(false);

@@ -13,7 +13,6 @@ namespace ImageSearch
     {
         IR _IR;
         List<Dupes> _Results;
-        bool _bBreak;
 
         public frmMain()
         {
@@ -39,7 +38,6 @@ namespace ImageSearch
             if (openFileDialog.ShowDialog() == DialogResult.Cancel)
                 return;
 
-            grdDupes.Visible = false;
             imgTest.Load(openFileDialog.FileName);
             List<ImageSearch.Result>  ResultList = _IR.Search(openFileDialog.FileName, 10, 0);
             GridLoadResults(ResultList, grdResult);
@@ -58,7 +56,7 @@ namespace ImageSearch
 
         private void btnDupes_Click(object sender, EventArgs e)
         {
-            grdDupes.Visible = true;
+            
             _Results = _IR.FindDuplicates();
             GridLoadDupes(_Results, grdDupes);
         }
@@ -84,12 +82,10 @@ namespace ImageSearch
             else
                 return;
 
-            FolderBrowserDialog dlgFolder = new FolderBrowserDialog();
-
-            if (dlgFolder.ShowDialog() == DialogResult.Cancel)
+            if (folderBrowserDialog.ShowDialog() == DialogResult.Cancel)
                 return;
 
-            string sDir = dlgFolder.SelectedPath;
+            string sDir = folderBrowserDialog.SelectedPath;
 
             string[] sFileList;
 
@@ -100,22 +96,11 @@ namespace ImageSearch
 
             if (sFileList.Length == 0) return;
 
-            ProgressBar.Visible = true;
             ProgressBar.Minimum = 0;
             ProgressBar.Maximum = sFileList.Length - 1;
 
-            _bBreak = false;
-
             for (int iCount = 0; iCount < sFileList.Length; iCount++)
             {
-
-                if (_bBreak)
-                {
-                    // Load has been interupted
-                    ImagesLoaded(iCount + 1);
-                    return;
-                }
-
                 string sFile = sFileList[iCount];
                 StatusBarLabel.Text = "Loading - " + sFile;
                 ProgressBar.Value = iCount;
@@ -216,16 +201,5 @@ namespace ImageSearch
 
 #endregion
 
-        private void frmMain_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            // Ctrl + Break key will interupt image loading
-            if(e.KeyChar == 3)
-                _bBreak = true;
-        }
-
-        private void frmMain_KeyDown(object sender, KeyEventArgs e)
-        {
-            Console.WriteLine(e.ToString());
-        }
     }
 }
