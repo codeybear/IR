@@ -59,5 +59,30 @@ namespace ImageSearch.Properties {
                 resourceCulture = value;
             }
         }
+        
+        internal static System.Drawing.Bitmap delete_16 {
+            get {
+                object obj = ResourceManager.GetObject("delete_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you wish to remove this image from the library and send the file to the recycle bin?.
+        /// </summary>
+        internal static string DialogMessageImageDelete {
+            get {
+                return ResourceManager.GetString("DialogMessageImageDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have images loaded are you sure you wish to continue and overwrite these?.
+        /// </summary>
+        internal static string DialogMessageResetLibrary {
+            get {
+                return ResourceManager.GetString("DialogMessageResetLibrary", resourceCulture);
+            }
+        }
     }
 }

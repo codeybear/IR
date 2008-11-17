@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
+using System.IO;
 
 namespace ImageHelper
 {
@@ -12,12 +12,9 @@ namespace ImageHelper
         /// <summary>
         /// Create a high quality thumbnail image
         /// </summary>
-        /// <param name="iHeight"></param>
-        /// <param name="sImage"></param>
-        /// <returns></returns>
         public static Bitmap GetThumbnail(int iHeight, string sImage)
         {
-            Image FullImage = new Bitmap(sImage); // your uploaded image
+            Image FullImage = new Bitmap(sImage);
             int iWidth = FullImage.Width / (FullImage.Height / iHeight);
 
             Bitmap bmp = new Bitmap(iWidth, iHeight);
@@ -27,7 +24,29 @@ namespace ImageHelper
             graphic.PixelOffsetMode = PixelOffsetMode.HighQuality;
             graphic.CompositingQuality = CompositingQuality.HighQuality;
             graphic.DrawImage(FullImage, 0, 0, iWidth, iHeight);
+            FullImage.Dispose();
             return bmp;
+        }
+
+        /// <summary>
+        /// Make sure the list of files are only images that the Bitmap object can load
+        /// </summary>
+        public static string[] GetValidFiles(IEnumerable<string> FileList)
+        {
+            List<string> ValidList = new List<string>();
+
+            foreach (string sFile in FileList)
+            {
+                FileInfo info = new FileInfo(sFile);
+                string sExt = info.Extension.ToLower();
+
+                if (".bmp.png.gif.jpg.jpeg.tif".Contains(sExt))
+                    ValidList.Add(sFile);
+            }
+
+            string[] ReturnList = new string[ValidList.Count];
+            ValidList.CopyTo(ReturnList);
+            return ReturnList;
         }
     }
 

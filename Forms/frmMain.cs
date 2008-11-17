@@ -48,7 +48,24 @@ namespace ImageSearch
         private void grdResult_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             string sFile = grdResult.Rows[e.RowIndex].Cells["FileName"].Value.ToString();
-            RunProgram(sFile);
+
+            if (grdResult.Columns[e.ColumnIndex].Name == "Delete")
+            {
+                if (MessageBox.Show(Properties.Resources.DialogMessageImageDelete,
+                                    "Remove Image", 
+                                    MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    WinFormsUIHelper.SendFileToRecycleBin(sFile);
+                    grdResult.Rows.RemoveAt(e.RowIndex);
+                    _Results[e.RowIndex].DupesList.RemoveAt(e.RowIndex);
+                    WinFormsUIHelper.DeleteRowFromGrid(grdDupes, "File", sFile);
+                    // Remove image from all other duplicate results
+                }
+            }
+            else
+            {
+                RunProgram(sFile);
+            }
         }
 
         private void grdDupes_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -63,6 +80,13 @@ namespace ImageSearch
             GridLoadDupes(_Results, grdDupes);
         }
 
+        private void frmMain_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Ctrl + Break key will interupt image loading
+            if (e.KeyChar == 3)
+                _bBreak = true;
+        }
+
         # endregion
 
         #region SupportMethods
@@ -70,34 +94,26 @@ namespace ImageSearch
         private bool CheckForLoadedImages()
         {
             if (_IR.Count > 0)
-                if (MessageBox.Show("You have images loaded are you sure you wish to continue and overwrite these?",
+                if (MessageBox.Show(Properties.Resources.DialogMessageResetLibrary,
                     "Exiting Images", MessageBoxButtons.YesNo) == DialogResult.No)
+                    return true;
+                else
+                {
+                    _IR.Clear();
                     return false;
+                }
 
-            return true;
+            return false;
         }
 
         private void LoadImages(bool bSubDirectories)
         {
             if (CheckForLoadedImages())
-                _IR.Clear();
-            else
                 return;
 
-            FolderBrowserDialog dlgFolder = new FolderBrowserDialog();
-
-            if (dlgFolder.ShowDialog() == DialogResult.Cancel)
-                return;
-
-            string sDir = dlgFolder.SelectedPath;
-
-            string[] sFileList;
-
-            if (bSubDirectories)
-                sFileList = Directory.GetFiles(sDir, "*.jpg", SearchOption.AllDirectories);
-            else
-                sFileList = Directory.GetFiles(sDir, "*.jpg");
-
+            string[] sFileList = WinFormsUIHelper.GetFilesFromFolder(bSubDirectories);
+            if (sFileList.Length == 0) return;
+            sFileList = ImageHelper.ImageUtil.GetValidFiles(sFileList);
             if (sFileList.Length == 0) return;
 
             ProgressBar.Visible = true;
@@ -108,7 +124,6 @@ namespace ImageSearch
 
             for (int iCount = 0; iCount < sFileList.Length; iCount++)
             {
-
                 if (_bBreak)
                 {
                     // Load has been interupted
@@ -119,7 +134,6 @@ namespace ImageSearch
                 string sFile = sFileList[iCount];
                 StatusBarLabel.Text = "Loading - " + sFile;
                 ProgressBar.Value = iCount;
-                imgTest.Load(sFile);
                 Application.DoEvents();
 
                 _IR.LoadImage(sFile);
@@ -153,11 +167,13 @@ namespace ImageSearch
         {
             grd.Rows.Clear();
 
+            Bitmap icon = Properties.Resources.delete_16;
+
             foreach (Result Result in ResultList)
             {
                 Bitmap bmp = ImageHelper.ImageUtil.GetThumbnail(100, Result.File);
 
-                grd.Rows.Add(new object[] { Result.Score, bmp, Result.File });
+                grd.Rows.Add(new object[] { Result.Score, bmp, icon, Result.File });
             }
         }
 
@@ -168,11 +184,10 @@ namespace ImageSearch
         private void loadLibraryMenuItem_Click(object sender, EventArgs e)
         {
             if (CheckForLoadedImages())
-                _IR.Clear();
-            else
                 return;
 
             openFileDialog.FileName = "";
+            openFileDialog.Filter = "Library Files(*.xml)|*.xml";
 
             if (openFileDialog.ShowDialog() == DialogResult.Cancel)
                 return;
@@ -215,17 +230,5 @@ namespace ImageSearch
         }
 
 #endregion
-
-        private void frmMain_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            // Ctrl + Break key will interupt image loading
-            if(e.KeyChar == 3)
-                _bBreak = true;
-        }
-
-        private void frmMain_KeyDown(object sender, KeyEventArgs e)
-        {
-            Console.WriteLine(e.ToString());
-        }
     }
 }

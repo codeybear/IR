@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Drawing;
-using System.Xml.Serialization;
-using System.Xml;
 using System.IO;
+using System.Xml.Serialization;
 
 namespace ImageSearch
 {
@@ -72,6 +70,11 @@ namespace ImageSearch
             _ImageList = new Dictionary<String,ImageInfo>();
         }
 
+        public void DeleteImage(string sFile)
+        {
+            _ImageList.Remove(sFile);
+        }
+
         public int Count
         {
             get { return _ImageList.Count; }
@@ -83,21 +86,27 @@ namespace ImageSearch
         public List<Dupes> FindDuplicates()
         {
             List<Dupes> Dupes = new List<Dupes>();
+            Dictionary<string, string> ResultCheck = new Dictionary<string, string>();
 
             foreach (string sKey in _ImageList.Keys)
             {
                 ImageInfo ThisImage = _ImageList[sKey];
 
+                // If this image has already been found as a match then don't search for it
+                // This prevents unnecessary duplicates, i.e. where image A matches B, also B matches A
+                if(ResultCheck.ContainsKey(ThisImage.File))
+                    continue;
+
                 List<Result> Results = Search(ThisImage, 0, 100);
 
                 // Search results will always contain 1 result as the search image will be found in the results
                 if (Results.Count > 1)
-                {
-                    // Remove the search image
-                    int iIndex = Results.FindIndex(Item => Item.File == ThisImage.File);
-                    Results.RemoveAt(iIndex);
-                    
+                {                    
                     Dupes.Add(new Dupes { File = ThisImage.File, DupesList = Results });
+
+                    foreach (Result result in Results)
+                        if(!ResultCheck.ContainsKey(result.File))
+                            ResultCheck.Add(result.File, "");
                 }
             }
 
@@ -247,8 +256,8 @@ namespace ImageSearch
 
         /// <summary>
         /// Save Hue data to file - class is serialized as xml.
+        /// Dictionary object cannot be serialized so its converted to an array.
         /// </summary>
-        /// <param name="sFileName"></param>
         public void Save(string sFileName)
         {
             ImageInfo[] SaveList = new ImageInfo[_ImageList.Values.Count];
@@ -263,7 +272,6 @@ namespace ImageSearch
         /// <summary>
         /// Load Hue data from file - class is serialized as xml.
         /// </summary>
-        /// <param name="sFileName"></param>
         public void Load(string sFileName)
         {
             ImageInfo[] LoadList;
