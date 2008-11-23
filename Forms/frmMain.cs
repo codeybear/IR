@@ -14,6 +14,7 @@ namespace ImageSearch
         IR _IR;
         List<Dupes> _Results;
         bool _bBreak;
+        int _iDupesSelectedIndex;
 
         public frmMain()
         {
@@ -57,9 +58,10 @@ namespace ImageSearch
                 {
                     WinFormsUIHelper.SendFileToRecycleBin(sFile);
                     grdResult.Rows.RemoveAt(e.RowIndex);
-                    _Results[e.RowIndex].DupesList.RemoveAt(e.RowIndex);
-                    WinFormsUIHelper.DeleteRowFromGrid(grdDupes, "File", sFile);
-                    // Remove image from all other duplicate results
+                    
+                    // If this was a duplicates search remove from the dupes collection as well
+                    if(grdDupes.Visible)
+                        _Results[_iDupesSelectedIndex].DupesList.RemoveAt(e.RowIndex);
                 }
             }
             else
@@ -70,6 +72,7 @@ namespace ImageSearch
 
         private void grdDupes_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            _iDupesSelectedIndex = e.RowIndex;
             GridLoadResults(_Results[e.RowIndex].DupesList, grdResult);
         }
 
