@@ -42,7 +42,9 @@ namespace ImageSearch
         {
             get
             {
-                return Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                Version version = Assembly.GetExecutingAssembly().GetName().Version;
+                string sVersion = string.Format("{0}.{1}.{2}", version.Major, version.Minor, version.Build);
+                return sVersion;
             }
         }
 

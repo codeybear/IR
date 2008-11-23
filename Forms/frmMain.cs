@@ -41,13 +41,14 @@ namespace ImageSearch
                 return;
 
             grdDupes.Visible = false;
-            imgTest.Load(openFileDialog.FileName);
-            List<ImageSearch.Result>  ResultList = _IR.Search(openFileDialog.FileName, 10, 0);
+            List<ImageSearch.Result>  ResultList = _IR.Search(openFileDialog.FileName, 10, 500);
             GridLoadResults(ResultList, grdResult);
         }
 
         private void grdResult_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            if (e.RowIndex == -1) return;
+
             string sFile = grdResult.Rows[e.RowIndex].Cells["FileName"].Value.ToString();
 
             if (grdResult.Columns[e.ColumnIndex].Name == "Delete")
@@ -72,6 +73,7 @@ namespace ImageSearch
 
         private void grdDupes_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            if (e.RowIndex == -1) return;
             _iDupesSelectedIndex = e.RowIndex;
             GridLoadResults(_Results[e.RowIndex].DupesList, grdResult);
         }
@@ -103,6 +105,8 @@ namespace ImageSearch
                 else
                 {
                     _IR.Clear();
+                    grdDupes.Visible = false;
+                    grdResult.Rows.Clear();
                     return false;
                 }
 

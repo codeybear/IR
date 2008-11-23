@@ -28,10 +28,13 @@ namespace ImageSearch
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.imgTest = new System.Windows.Forms.PictureBox();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btnSearch = new System.Windows.Forms.Button();
             this.grdResult = new System.Windows.Forms.DataGridView();
+            this.Score = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Image = new System.Windows.Forms.DataGridViewImageColumn();
+            this.Delete = new System.Windows.Forms.DataGridViewImageColumn();
+            this.FileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.StatusBar = new System.Windows.Forms.StatusStrip();
             this.ProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.StatusBarLabel = new System.Windows.Forms.ToolStripStatusLabel();
@@ -51,27 +54,11 @@ namespace ImageSearch
             this.grdDupes = new System.Windows.Forms.DataGridView();
             this.DupeImage = new System.Windows.Forms.DataGridViewImageColumn();
             this.File = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Score = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Image = new System.Windows.Forms.DataGridViewImageColumn();
-            this.Delete = new System.Windows.Forms.DataGridViewImageColumn();
-            this.FileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            ((System.ComponentModel.ISupportInitialize)(this.imgTest)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.grdResult)).BeginInit();
             this.StatusBar.SuspendLayout();
             this.menuMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdDupes)).BeginInit();
             this.SuspendLayout();
-            // 
-            // imgTest
-            // 
-            this.imgTest.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)));
-            this.imgTest.Location = new System.Drawing.Point(12, 65);
-            this.imgTest.Name = "imgTest";
-            this.imgTest.Size = new System.Drawing.Size(128, 208);
-            this.imgTest.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.imgTest.TabIndex = 0;
-            this.imgTest.TabStop = false;
             // 
             // btnSearch
             // 
@@ -109,6 +96,33 @@ namespace ImageSearch
             this.grdResult.Size = new System.Drawing.Size(352, 558);
             this.grdResult.TabIndex = 5;
             this.grdResult.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grdResult_CellClick);
+            // 
+            // Score
+            // 
+            this.Score.HeaderText = "Score";
+            this.Score.Name = "Score";
+            this.Score.ReadOnly = true;
+            this.Score.Width = 40;
+            // 
+            // Image
+            // 
+            this.Image.HeaderText = "Image";
+            this.Image.Name = "Image";
+            this.Image.ReadOnly = true;
+            // 
+            // Delete
+            // 
+            this.Delete.HeaderText = "Delete";
+            this.Delete.Name = "Delete";
+            this.Delete.ReadOnly = true;
+            this.Delete.Width = 50;
+            // 
+            // FileName
+            // 
+            this.FileName.HeaderText = "Hidden";
+            this.FileName.Name = "FileName";
+            this.FileName.ReadOnly = true;
+            this.FileName.Visible = false;
             // 
             // StatusBar
             // 
@@ -240,6 +254,7 @@ namespace ImageSearch
             this.DupeImage,
             this.File});
             this.grdDupes.Location = new System.Drawing.Point(12, 65);
+            this.grdDupes.MultiSelect = false;
             this.grdDupes.Name = "grdDupes";
             this.grdDupes.ReadOnly = true;
             this.grdDupes.RowHeadersVisible = false;
@@ -258,39 +273,12 @@ namespace ImageSearch
             // File
             // 
             this.File.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.File.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.File.DefaultCellStyle = dataGridViewCellStyle1;
             this.File.HeaderText = "File";
             this.File.Name = "File";
             this.File.ReadOnly = true;
             this.File.Width = 150;
-            // 
-            // Score
-            // 
-            this.Score.HeaderText = "Score";
-            this.Score.Name = "Score";
-            this.Score.ReadOnly = true;
-            this.Score.Width = 40;
-            // 
-            // Image
-            // 
-            this.Image.HeaderText = "Image";
-            this.Image.Name = "Image";
-            this.Image.ReadOnly = true;
-            // 
-            // Delete
-            // 
-            this.Delete.HeaderText = "Delete";
-            this.Delete.Name = "Delete";
-            this.Delete.ReadOnly = true;
-            this.Delete.Width = 50;
-            // 
-            // FileName
-            // 
-            this.FileName.HeaderText = "Hidden";
-            this.FileName.Name = "FileName";
-            this.FileName.ReadOnly = true;
-            this.FileName.Visible = false;
             // 
             // frmMain
             // 
@@ -303,14 +291,12 @@ namespace ImageSearch
             this.Controls.Add(this.menuMain);
             this.Controls.Add(this.grdResult);
             this.Controls.Add(this.btnSearch);
-            this.Controls.Add(this.imgTest);
             this.KeyPreview = true;
             this.MainMenuStrip = this.menuMain;
             this.Name = "frmMain";
             this.Text = "Image Search";
             this.Load += new System.EventHandler(this.frmMain_Load);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.frmMain_KeyPress);
-            ((System.ComponentModel.ISupportInitialize)(this.imgTest)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.grdResult)).EndInit();
             this.StatusBar.ResumeLayout(false);
             this.StatusBar.PerformLayout();
@@ -324,7 +310,6 @@ namespace ImageSearch
 
         #endregion
 
-        private System.Windows.Forms.PictureBox imgTest;
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.DataGridView grdResult;
         private System.Windows.Forms.StatusStrip StatusBar;
