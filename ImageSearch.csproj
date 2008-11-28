@@ -88,7 +88,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="Resources\delete_16x.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

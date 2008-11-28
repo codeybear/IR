@@ -37,6 +37,8 @@ namespace ImageSearch
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+
             if (openFileDialog.ShowDialog() == DialogResult.Cancel)
                 return;
 
@@ -139,7 +141,7 @@ namespace ImageSearch
                 }
 
                 string sFile = sFileList[iCount];
-                StatusBarLabel.Text = "Loading - " + sFile;
+                StatusBarLabel.Text = "Loading - " + sFile + " (Ctrl + Break to cancel)";
                 ProgressBar.Value = iCount;
                 Application.DoEvents();
 
@@ -193,6 +195,8 @@ namespace ImageSearch
             if (CheckForLoadedImages())
                 return;
 
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+
             openFileDialog.FileName = "";
             openFileDialog.Filter = "Library Files(*.xml)|*.xml";
 
@@ -211,6 +215,8 @@ namespace ImageSearch
 
         private void saveLibraryMenuItem_Click(object sender, EventArgs e)
         {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+
             saveFileDialog.DefaultExt = "xml";
             saveFileDialog.AddExtension = true;
 

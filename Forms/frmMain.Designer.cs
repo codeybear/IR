@@ -28,7 +28,7 @@ namespace ImageSearch
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btnSearch = new System.Windows.Forms.Button();
             this.grdResult = new System.Windows.Forms.DataGridView();
             this.Score = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -38,7 +38,6 @@ namespace ImageSearch
             this.StatusBar = new System.Windows.Forms.StatusStrip();
             this.ProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.StatusBarLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.menuMain = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -49,7 +48,6 @@ namespace ImageSearch
             this.loadImagesIncSubdirectoriesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadLibraryMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveLibraryMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.btnDupes = new System.Windows.Forms.Button();
             this.grdDupes = new System.Windows.Forms.DataGridView();
             this.DupeImage = new System.Windows.Forms.DataGridViewImageColumn();
@@ -86,14 +84,14 @@ namespace ImageSearch
             this.Image,
             this.Delete,
             this.FileName});
-            this.grdResult.Location = new System.Drawing.Point(341, 65);
+            this.grdResult.Location = new System.Drawing.Point(326, 65);
             this.grdResult.MultiSelect = false;
             this.grdResult.Name = "grdResult";
             this.grdResult.ReadOnly = true;
             this.grdResult.RowHeadersVisible = false;
             this.grdResult.RowHeadersWidth = 4;
             this.grdResult.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            this.grdResult.Size = new System.Drawing.Size(352, 558);
+            this.grdResult.Size = new System.Drawing.Size(215, 556);
             this.grdResult.TabIndex = 5;
             this.grdResult.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grdResult_CellClick);
             // 
@@ -130,9 +128,9 @@ namespace ImageSearch
             this.StatusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ProgressBar,
             this.StatusBarLabel});
-            this.StatusBar.Location = new System.Drawing.Point(0, 638);
+            this.StatusBar.Location = new System.Drawing.Point(0, 636);
             this.StatusBar.Name = "StatusBar";
-            this.StatusBar.Size = new System.Drawing.Size(705, 23);
+            this.StatusBar.Size = new System.Drawing.Size(553, 23);
             this.StatusBar.Stretch = false;
             this.StatusBar.TabIndex = 6;
             // 
@@ -147,10 +145,6 @@ namespace ImageSearch
             this.StatusBarLabel.Name = "StatusBarLabel";
             this.StatusBarLabel.Size = new System.Drawing.Size(0, 18);
             // 
-            // openFileDialog
-            // 
-            this.openFileDialog.FileName = "openFileDialog";
-            // 
             // menuMain
             // 
             this.menuMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -158,7 +152,7 @@ namespace ImageSearch
             this.libraryToolStripMenuItem});
             this.menuMain.Location = new System.Drawing.Point(0, 0);
             this.menuMain.Name = "menuMain";
-            this.menuMain.Size = new System.Drawing.Size(705, 24);
+            this.menuMain.Size = new System.Drawing.Size(553, 24);
             this.menuMain.TabIndex = 7;
             this.menuMain.Text = "menuStrip1";
             // 
@@ -259,7 +253,7 @@ namespace ImageSearch
             this.grdDupes.ReadOnly = true;
             this.grdDupes.RowHeadersVisible = false;
             this.grdDupes.RowTemplate.DefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.grdDupes.Size = new System.Drawing.Size(267, 558);
+            this.grdDupes.Size = new System.Drawing.Size(281, 556);
             this.grdDupes.TabIndex = 9;
             this.grdDupes.Visible = false;
             this.grdDupes.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grdDupes_CellClick);
@@ -273,8 +267,8 @@ namespace ImageSearch
             // File
             // 
             this.File.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.File.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.File.DefaultCellStyle = dataGridViewCellStyle4;
             this.File.HeaderText = "File";
             this.File.Name = "File";
             this.File.ReadOnly = true;
@@ -284,7 +278,7 @@ namespace ImageSearch
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(705, 661);
+            this.ClientSize = new System.Drawing.Size(553, 659);
             this.Controls.Add(this.grdDupes);
             this.Controls.Add(this.btnDupes);
             this.Controls.Add(this.StatusBar);
@@ -314,14 +308,12 @@ namespace ImageSearch
         private System.Windows.Forms.DataGridView grdResult;
         private System.Windows.Forms.StatusStrip StatusBar;
         private System.Windows.Forms.ToolStripProgressBar ProgressBar;
-        private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.MenuStrip menuMain;
         private System.Windows.Forms.ToolStripMenuItem libraryToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loadImagesMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loadLibraryMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveLibraryMenuItem;
         private System.Windows.Forms.ToolStripStatusLabel StatusBarLabel;
-        private System.Windows.Forms.SaveFileDialog saveFileDialog;
         private System.Windows.Forms.ToolStripMenuItem loadImagesIncSubdirectoriesMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitMenuItem;
