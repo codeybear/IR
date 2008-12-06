@@ -43,7 +43,7 @@ namespace ImageSearch
                 return;
 
             grdDupes.Visible = false;
-            List<ImageSearch.Result>  ResultList = _IR.Search(openFileDialog.FileName, 10, 500);
+            List<ImageSearch.Result> ResultList = _IR.Search(openFileDialog.FileName, 10, 500);
             GridLoadResults(ResultList, grdResult);
         }
 

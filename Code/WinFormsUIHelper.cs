@@ -5,6 +5,10 @@ namespace ImageSearch
 {
     public class WinFormsUIHelper
     {
+        /// <summary>
+        /// Get a list of files from a folder based on the result of a FolderBrowserDialog
+        /// </summary>
+        /// <param name="bSubDirs">Include sub directories</param>
         public static string[] GetFilesFromFolder(bool bSubDirs)
         {
             FolderBrowserDialog dlgFolder = new FolderBrowserDialog();
@@ -36,14 +40,5 @@ namespace ImageSearch
                 Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs,
                 Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
         }
-
-
-        public static void DeleteRowFromGrid(DataGridView grd, string sColumn, string sValue)
-        {
-            for (int iRow = 0; iRow < grd.Rows.Count; iRow++)
-                if (grd.Rows[iRow].Cells[sColumn].Value.ToString() == sValue)
-                    grd.Rows.RemoveAt(iRow);
-        }
-
     }
 }

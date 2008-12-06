@@ -54,27 +54,43 @@ namespace ImageSearch
             _iGridSize = _iCols * _iRows;
         }
 
+        /// <summary>
+        /// Number of bars the histogram is split into
+        /// </summary>
         public int NumBars
         {
             get { return _iNumBars; }
             set { _iNumBars = value; }
         }
 
+        /// <summary>
+        /// Create a signature for this image and load it into the libarry
+        /// </summary>
+        /// <param name="sFile"></param>
         public void LoadImage(string sFile)
         {
             _ImageList.Add(sFile, GetSignature(sFile));
         }
 
+        /// <summary>
+        /// Clear all images from the library
+        /// </summary>
         public void Clear()
         {
             _ImageList = new Dictionary<String,ImageInfo>();
         }
 
+        /// <summary>
+        /// Delete an image from the libary based on its filename including path
+        /// </summary>
         public void DeleteImage(string sFile)
         {
             _ImageList.Remove(sFile);
         }
 
+        /// <summary>
+        /// Number of images that have been loaded
+        /// </summary>
         public int Count
         {
             get { return _ImageList.Count; }
@@ -114,8 +130,6 @@ namespace ImageSearch
         }
 
         /// <summary>
-        /// Note: OverLoaded Method
-        /// 
         /// Search for an image within the loaded list of images
         /// The likelyness of a match is given by a score
         /// Returns a list of results sorted by the score
@@ -150,6 +164,11 @@ namespace ImageSearch
             return ResultList;
         }
 
+        /// <summary>
+        /// Search for an image within the loaded list of images
+        /// 
+        /// Method is overloaded see <seealso cref="Search(ImageInfo SearchImage, int iTop, int iTopScore)"/>
+        /// </summary>
         public List<Result> Search(string sFile, int iTop, int iTopScore)
         {
             ImageInfo SearchImageInfo = GetSignature(sFile);
@@ -170,6 +189,9 @@ namespace ImageSearch
             return iScore;
         }
 
+        /// <summary>
+        /// Get the image signature for a specific file
+        /// </summary>
         public ImageInfo GetSignature(string sFile)
         {
             ImageInfo ImageInfo = new ImageInfo { File = sFile, Section = new SectionInfo[_iGridSize] };
