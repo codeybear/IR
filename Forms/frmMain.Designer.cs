@@ -289,7 +289,6 @@ namespace ImageSearch
             this.MainMenuStrip = this.menuMain;
             this.Name = "frmMain";
             this.Text = "Image Search";
-            this.Load += new System.EventHandler(this.frmMain_Load);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.frmMain_KeyPress);
             ((System.ComponentModel.ISupportInitialize)(this.grdResult)).EndInit();
             this.StatusBar.ResumeLayout(false);

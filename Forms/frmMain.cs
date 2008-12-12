@@ -1,11 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
-using System.IO;
 
 namespace ImageSearch
 {
@@ -32,66 +28,100 @@ namespace ImageSearch
 
         #region ControlEvents
 
-        private void frmMain_Load(object sender, EventArgs e)
-        { }
-
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            try
+            {
 
-            if (openFileDialog.ShowDialog() == DialogResult.Cancel)
-                return;
+                OpenFileDialog openFileDialog = new OpenFileDialog();
 
-            grdDupes.Visible = false;
-            List<ImageSearch.Result> ResultList = _IR.Search(openFileDialog.FileName, 10, 500);
-            GridLoadResults(ResultList, grdResult);
+                if (openFileDialog.ShowDialog() == DialogResult.Cancel)
+                    return;
+
+                grdDupes.Visible = false;
+                List<ImageSearch.Result> ResultList = _IR.Search(openFileDialog.FileName, 10, 500);
+                GridLoadResults(ResultList, grdResult);
+            }
+            catch(Exception ex)
+            {
+                Utils.HandleException(ex);
+            }
         }
 
         private void grdResult_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex == -1) return;
-
-            string sFile = grdResult.Rows[e.RowIndex].Cells["FileName"].Value.ToString();
-
-            if (grdResult.Columns[e.ColumnIndex].Name == "Delete")
+            try
             {
-                if (MessageBox.Show(Properties.Resources.DialogMessageImageDelete,
-                                    "Remove Image", 
-                                    MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (e.RowIndex == -1) return;
+
+                string sFile = grdResult.Rows[e.RowIndex].Cells["FileName"].Value.ToString();
+
+                if (grdResult.Columns[e.ColumnIndex].Name == "Delete")
                 {
-                    WinFormsUIHelper.SendFileToRecycleBin(sFile);
-                    grdResult.Rows.RemoveAt(e.RowIndex);
-                    
-                    // If this was a duplicates search remove from the dupes collection as well
-                    if(grdDupes.Visible)
-                        _Results[_iDupesSelectedIndex].DupesList.RemoveAt(e.RowIndex);
+                    if (MessageBox.Show(Properties.Resources.DialogMessageImageDelete,
+                                        "Remove Image",
+                                        MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    {
+                        Utils.SendFileToRecycleBin(sFile);
+                        grdResult.Rows.RemoveAt(e.RowIndex);
+
+                        // If this was a duplicates search remove from the dupes collection as well
+                        if (grdDupes.Visible)
+                            _Results[_iDupesSelectedIndex].DupesList.RemoveAt(e.RowIndex);
+                    }
+                }
+                else
+                {
+                    RunProgram(sFile);
                 }
             }
-            else
+            catch(Exception ex)
             {
-                RunProgram(sFile);
+                Utils.HandleException(ex);
             }
         }
 
         private void grdDupes_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex == -1) return;
-            _iDupesSelectedIndex = e.RowIndex;
-            GridLoadResults(_Results[e.RowIndex].DupesList, grdResult);
+            try
+            {
+                if (e.RowIndex == -1) return;
+                _iDupesSelectedIndex = e.RowIndex;
+                GridLoadResults(_Results[e.RowIndex].DupesList, grdResult);
+            }
+            catch (Exception ex)
+            {
+                Utils.HandleException(ex);
+            }
+
         }
 
         private void btnDupes_Click(object sender, EventArgs e)
         {
-            grdDupes.Visible = true;
-            _Results = _IR.FindDuplicates();
-            GridLoadDupes(_Results, grdDupes);
+            try
+            {
+                grdDupes.Visible = true;
+                _Results = _IR.FindDuplicates();
+                GridLoadDupes(_Results, grdDupes);
+            }
+            catch(Exception ex)
+            {
+                Utils.HandleException(ex);
+            }
         }
 
         private void frmMain_KeyPress(object sender, KeyPressEventArgs e)
         {
+            try
+            {
             // Ctrl + Break key will interupt image loading
             if (e.KeyChar == 3)
                 _bBreak = true;
+            }
+            catch (Exception ex)
+            {
+                Utils.HandleException(ex);
+            }
         }
 
         # endregion
@@ -120,7 +150,7 @@ namespace ImageSearch
             if (CheckForLoadedImages())
                 return;
 
-            string[] sFileList = WinFormsUIHelper.GetFilesFromFolder(bSubDirectories);
+            string[] sFileList = Utils.GetFilesFromFolder(bSubDirectories);
             if (sFileList.Length == 0) return;
             sFileList = ImageHelper.ImageUtil.GetValidFiles(sFileList);
             if (sFileList.Length == 0) return;
@@ -192,43 +222,71 @@ namespace ImageSearch
 
         private void loadLibraryMenuItem_Click(object sender, EventArgs e)
         {
-            if (CheckForLoadedImages())
-                return;
+            try
+            {
+                if (CheckForLoadedImages())
+                    return;
 
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+                OpenFileDialog openFileDialog = new OpenFileDialog();
 
-            openFileDialog.FileName = "";
-            openFileDialog.Filter = "Library Files(*.xml)|*.xml";
+                openFileDialog.FileName = "";
+                openFileDialog.Filter = "Library Files(*.xml)|*.xml";
 
-            if (openFileDialog.ShowDialog() == DialogResult.Cancel)
-                return;
+                if (openFileDialog.ShowDialog() == DialogResult.Cancel)
+                    return;
 
-            _IR.Load(openFileDialog.FileName);
+                _IR.Load(openFileDialog.FileName);
 
-            ImagesLoaded(_IR.Count);
+                ImagesLoaded(_IR.Count);
+            }
+            catch (Exception ex)
+            {
+                Utils.HandleException(ex);
+            }
         }
 
         private void loadImagesMenuItem_Click(object sender, EventArgs e)
         {
-            LoadImages(false);
+            try
+            {
+                LoadImages(false);
+            }
+            catch (Exception ex)
+            {
+                Utils.HandleException(ex);
+            }
         }
 
         private void saveLibraryMenuItem_Click(object sender, EventArgs e)
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            try
+            {
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
 
-            saveFileDialog.DefaultExt = "xml";
-            saveFileDialog.AddExtension = true;
+                saveFileDialog.DefaultExt = "xml";
+                saveFileDialog.AddExtension = true;
 
-            if (saveFileDialog.ShowDialog() == DialogResult.Cancel)
-                return;
+                if (saveFileDialog.ShowDialog() == DialogResult.Cancel)
+                    return;
 
-            _IR.Save(saveFileDialog.FileName);
+                _IR.Save(saveFileDialog.FileName);
+            }
+            catch (Exception ex)
+            {
+                Utils.HandleException(ex);
+            }
         }
 
         private void loadImagesIncSubdirectoriesMenuItem_Click(object sender, EventArgs e)
         {
-            LoadImages(true);
+            try
+            {
+                LoadImages(true);
+            }
+            catch (Exception ex)
+            {
+                Utils.HandleException(ex);
+            }
         }
 
         private void exitMenuItem_Click(object sender, EventArgs e)

@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace ImageSearch
 {
-    public class WinFormsUIHelper
+    public class Utils
     {
         /// <summary>
         /// Get a list of files from a folder based on the result of a FolderBrowserDialog
@@ -39,6 +39,14 @@ namespace ImageSearch
                 sFile,
                 Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs,
                 Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
+        }
+
+        /// <summary>
+        /// Deal with unhandled exceptions
+        /// </summary>
+        public static void HandleException(System.Exception ex)
+        {
+            MessageBox.Show(ex.ToString());
         }
     }
 }
