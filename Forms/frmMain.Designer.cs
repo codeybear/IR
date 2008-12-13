@@ -28,7 +28,7 @@ namespace ImageSearch
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btnSearch = new System.Windows.Forms.Button();
             this.grdResult = new System.Windows.Forms.DataGridView();
             this.Score = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -267,8 +267,8 @@ namespace ImageSearch
             // File
             // 
             this.File.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.File.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.File.DefaultCellStyle = dataGridViewCellStyle1;
             this.File.HeaderText = "File";
             this.File.Name = "File";
             this.File.ReadOnly = true;

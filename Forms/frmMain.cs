@@ -64,7 +64,7 @@ namespace ImageSearch
                     {
                         Utils.SendFileToRecycleBin(sFile);
                         grdResult.Rows.RemoveAt(e.RowIndex);
-
+                        _IR.DeleteImage(sFile);
                         // If this was a duplicates search remove from the dupes collection as well
                         if (grdDupes.Visible)
                             _Results[_iDupesSelectedIndex].DupesList.RemoveAt(e.RowIndex);
