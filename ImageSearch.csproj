@@ -43,7 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Code\WinFormsUIHelper.cs" />
+    <Compile Include="Code\Utils.cs" />
     <Compile Include="Forms\frmAboutBox.cs">
       <SubType>Form</SubType>
     </Compile>
