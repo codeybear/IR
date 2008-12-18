@@ -128,6 +128,11 @@ namespace ImageSearch
 
         #region SupportMethods
 
+        /// <summary>
+        /// Check to see if any images have already been loaded
+        /// User can choose to cancel or continue and overight
+        /// </summary>
+        /// <returns>true = continue and clear loaded images</returns>
         private bool CheckForLoadedImages()
         {
             if (_IR.Count > 0)
@@ -145,6 +150,10 @@ namespace ImageSearch
             return false;
         }
 
+        /// <summary>
+        /// Load in images from folder selected by the user
+        /// </summary>
+        /// <param name="bSubDirectories">If true load from sub directories</param>
         private void LoadImages(bool bSubDirectories)
         {
             if (CheckForLoadedImages())
@@ -181,6 +190,10 @@ namespace ImageSearch
             ImagesLoaded(_IR.Count);
         }
 
+        /// <summary>
+        /// Sets up the UI for when images have been loaded
+        /// </summary>
+        /// <param name="iNumLoaded">Total images that have been loaded</param>
         private void ImagesLoaded(int iNumLoaded)
         {
             ProgressBar.Visible = false;
@@ -190,6 +203,9 @@ namespace ImageSearch
             btnSearch.Enabled = true;
         }
 
+        /// <summary>
+        /// Load images into DataGridView
+        /// </summary>
         private void GridLoadDupes(IEnumerable<Dupes> DupesList, DataGridView grd)
         {
             grd.Rows.Clear();
@@ -202,6 +218,9 @@ namespace ImageSearch
             }
         }
 
+        /// <summary>
+        /// Load search results into DataGridView
+        /// </summary>
         private void GridLoadResults(IEnumerable<Result> ResultList, DataGridView grd)
         {
             grd.Rows.Clear();
