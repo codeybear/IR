@@ -104,7 +104,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="Resources\delete_16x.ico" />
   </ItemGroup>
   <ItemGroup>

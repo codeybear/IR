@@ -150,6 +150,9 @@ namespace ImageSearch
                 for (int iSection = 0; iSection < _iGridSize - 1; iSection++)
                 {
                     iScore += Compare(SearchImage.Section[iSection], ThisImage.Section[iSection]);
+
+                    if (iScore > iTopScore)
+                        break;
                 }
 
                 if (iScore <= iTopScore || iTopScore == 0)
