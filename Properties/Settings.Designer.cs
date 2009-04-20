@@ -22,5 +22,71 @@ namespace ImageSearch.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(".bmp.png.gif.jpg.jpeg.tif")]
+        public string ValidImageExtensions {
+            get {
+                return ((string)(this["ValidImageExtensions"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public int ThumbNailHeight {
+            get {
+                return ((int)(this["ThumbNailHeight"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0, 0")]
+        public global::System.Drawing.Point WindowSettingsLocation {
+            get {
+                return ((global::System.Drawing.Point)(this["WindowSettingsLocation"]));
+            }
+            set {
+                this["WindowSettingsLocation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0, 0")]
+        public global::System.Drawing.Size WindowSettingsSize {
+            get {
+                return ((global::System.Drawing.Size)(this["WindowSettingsSize"]));
+            }
+            set {
+                this["WindowSettingsSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Normal")]
+        public global::System.Windows.Forms.FormWindowState WindowSettingsState {
+            get {
+                return ((global::System.Windows.Forms.FormWindowState)(this["WindowSettingsState"]));
+            }
+            set {
+                this["WindowSettingsState"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int WindowSettingsSplitterDistance {
+            get {
+                return ((int)(this["WindowSettingsSplitterDistance"]));
+            }
+            set {
+                this["WindowSettingsSplitterDistance"] = value;
+            }
+        }
     }
 }

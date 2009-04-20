@@ -4,59 +4,71 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
+using ImageSearch.Properties;
 
 namespace ImageHelper
 {
     public class ImageUtil
     {
-        /// <summary>
-        /// Create a high quality thumbnail image
-        /// </summary>
-        public static Bitmap GetThumbnail(int iHeight, string sImage)
+        /// <summary> Create a high quality thumbnail image</summary>
+        public static Bitmap GetThumbnail(int iHeight, int iWidth, Bitmap bmpImage, PixelFormat PixelFormat)
         {
-            Image FullImage = new Bitmap(sImage);
-            int iWidth = FullImage.Width / (FullImage.Height / iHeight);
-
-            Bitmap bmp = new Bitmap(iWidth, iHeight);
+            Bitmap bmp = new Bitmap(iWidth, iHeight, PixelFormat);
             Graphics graphic = Graphics.FromImage(bmp);
             graphic.InterpolationMode = InterpolationMode.HighQualityBicubic;
             graphic.SmoothingMode = SmoothingMode.HighQuality;
             graphic.PixelOffsetMode = PixelOffsetMode.HighQuality;
             graphic.CompositingQuality = CompositingQuality.HighQuality;
-            graphic.DrawImage(FullImage, 0, 0, iWidth, iHeight);
-            FullImage.Dispose();
+            graphic.DrawImage(bmpImage, 0, 0, iWidth, iHeight);
+            bmpImage.Dispose();
             return bmp;
         }
 
-        /// <summary>
-        /// Make sure the list of files are only images that the Bitmap object can load
-        /// </summary>
-        public static string[] GetValidFiles(IEnumerable<string> FileList)
+        /// <summary> Create a high quality thumbnail image</summary>
+        public static Bitmap GetThumbnail(int iHeight, int iWidth, string sImage, PixelFormat PixelFormat)
         {
-            List<string> ValidList = new List<string>();
+            Bitmap bmpImage = new Bitmap(sImage);
 
-            foreach (string sFile in FileList)
+            return GetThumbnail(iHeight, iWidth, bmpImage, PixelFormat);
+        }
+
+        /// <summary> Create a high quality thumbnail image</summary>
+        public static Bitmap GetThumbnail(BitmapData BitmapData, Bitmap bmpImage)
+        {
+            return GetThumbnail(BitmapData.Height, BitmapData.Width, bmpImage, PixelFormat.Format16bppRgb555);
+        }
+
+        /// <summary> Create a high quality thumbnail image</summary>
+        public static Bitmap GetThumbnail(int iHeight, string sImage)
+        {
+            if (System.IO.File.Exists(sImage))
             {
-                FileInfo info = new FileInfo(sFile);
-                string sExt = info.Extension.ToLower();
-
-                if (".bmp.png.gif.jpg.jpeg.tif".Contains(sExt))
-                    ValidList.Add(sFile);
+                Bitmap bmpImage = new Bitmap(sImage);
+                int iWidth = bmpImage.Width / (bmpImage.Height / iHeight);
+                return GetThumbnail(iHeight, iWidth, bmpImage, PixelFormat.Format32bppRgb);
             }
+            else
+                return ImageSearch.Properties.Resources.bmpMissingImage;
+        }
 
-            string[] ReturnList = new string[ValidList.Count];
-            ValidList.CopyTo(ReturnList);
-            return ReturnList;
+         ///<summary> Create a bitmap from byte array </summary>
+        public static Bitmap CreateBitmapFromArray(byte[] Bytes, BitmapData SmallBitmapData)
+        {
+            Bitmap bmp = new Bitmap(SmallBitmapData.Width, SmallBitmapData.Height, SmallBitmapData.PixelFormat);
+            BitmapData bmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.WriteOnly, bmp.PixelFormat);
+            System.Runtime.InteropServices.Marshal.Copy(Bytes, 0, bmpData.Scan0, Bytes.Length);
+            bmp.UnlockBits(bmpData);
+            return bmp;
         }
     }
 
-    /// <summary>
-    /// Uses the bitmap.LockBits method to enable high speed access to pixel data
-    /// </summary>
+    /// <summary> Uses the bitmap.LockBits method to enable high speed access to pixel data </summary>
     public class BitmapBytes
     {
         private Byte[] _Bytes;
         private int _iRowLength;
+        private BitmapData _bmpData;
+        private Bitmap _bmp;
 
         public Byte[] Bytes
         { 
@@ -68,24 +80,38 @@ namespace ImageHelper
             LockBitmap(bmp);
         }
 
-        /// <summary>
-        /// Copy the contents of a bitmap to an array of bytes.
-        /// This will greatly improve the speed of accessing the pixel data.
-        /// </summary>
+        /// <summary> Copy the contents of a bitmap to an array of bytes
+        /// This will greatly improve the speed of accessing the pixel data. </summary>
         public void LockBitmap(Bitmap bmp)
         {
             Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
-            BitmapData bmpData = bmp.LockBits(rect, ImageLockMode.ReadOnly, bmp.PixelFormat);
-            _iRowLength = bmpData.Stride;
+            _bmpData = bmp.LockBits(rect, ImageLockMode.ReadOnly, bmp.PixelFormat);
+            _iRowLength = _bmpData.Stride;
 
-            int iPixelCount = bmpData.Stride * bmpData.Height;
+            int iPixelCount = _bmpData.Stride * _bmpData.Height;
             _Bytes = new byte[iPixelCount];
-            System.Runtime.InteropServices.Marshal.Copy(bmpData.Scan0, _Bytes, 0, iPixelCount);
+            System.Runtime.InteropServices.Marshal.Copy(_bmpData.Scan0, _Bytes, 0, iPixelCount);
+            _bmp = bmp;
         }
 
-        /// <summary>
-        /// Get pixel from byte array at specified coordinates
-        /// </summary>
+        /// <summary> Copy the data back into the bitmap.</summary>
+        public void UnlockBitmap(bool bCopyToBitmap)
+        {
+            if (bCopyToBitmap)
+            {
+                int iPixelCount = _bmpData.Stride * _bmpData.Height;
+                System.Runtime.InteropServices.Marshal.Copy(_Bytes, 0, _bmpData.Scan0, iPixelCount);
+            }
+
+            // Unlock the bitmap.
+            _bmp.UnlockBits(_bmpData);
+
+            // Release resources
+            _Bytes = null;
+            _bmpData = null;
+        }
+
+        /// <summary> Get pixel hsi value from byte array at specified coordinates </summary>
         public Color GetHSIFromPoint(int x ,int y)
         {
             byte r, g, b;
@@ -98,6 +124,18 @@ namespace ImageHelper
             Color Color = new Color();
             Color = Color.FromArgb(r, g, b);
             return Color;
+        }
+
+        public int GetPixelPart(int x, int y, ImageSearch.RGB iRGB)
+        {
+            return _Bytes[(y * _iRowLength) + (x * 3) + (int)iRGB];
+        }
+
+        public void SetPixel(int x, int y, byte r, byte g, byte b)
+        {
+            _Bytes[(y * _iRowLength) + (x * 3) + 2] = r;
+            _Bytes[(y * _iRowLength) + (x * 3) + 1] = g;
+            _Bytes[(y * _iRowLength) + (x * 3)] = b;
         }
     }
 }

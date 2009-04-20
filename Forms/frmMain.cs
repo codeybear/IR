@@ -2,13 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using ImageSearch.Properties;
 
 namespace ImageSearch
 {
     public partial class frmMain : Form
     {
         IR _IR;
-        List<Dupes> _Results;
+        DupesList _Results;
         bool _bBreak;
         int _iDupesSelectedIndex;
 
@@ -20,10 +21,15 @@ namespace ImageSearch
 
         private void RunProgram(string sParam)
         {
-            System.Diagnostics.Process proc = new System.Diagnostics.Process();
-            proc.EnableRaisingEvents = false;
-            proc.StartInfo.FileName = sParam;
-            proc.Start();
+            // TODO possibly have an option to enable the default viewer:
+            //System.Diagnostics.Process proc = new System.Diagnostics.Process();
+            //proc.EnableRaisingEvents = false;
+            //proc.StartInfo.FileName = sParam;
+            //proc.Start();
+
+            frmShowImage frmShowImage = new frmShowImage(sParam);
+            frmShowImage.Show();
+            
         }
 
         #region ControlEvents
@@ -32,11 +38,13 @@ namespace ImageSearch
         {
             try
             {
-
                 OpenFileDialog openFileDialog = new OpenFileDialog();
 
                 if (openFileDialog.ShowDialog() == DialogResult.Cancel)
                     return;
+
+                splitContainer.Panel1Collapsed = true;
+                splitContainer.Visible = true;
 
                 grdDupes.Visible = false;
                 List<ImageSearch.Result> ResultList = _IR.Search(openFileDialog.FileName, 10, 500);
@@ -67,7 +75,7 @@ namespace ImageSearch
                         _IR.DeleteImage(sFile);
                         // If this was a duplicates search remove from the dupes collection as well
                         if (grdDupes.Visible)
-                            _Results[_iDupesSelectedIndex].DupesList.RemoveAt(e.RowIndex);
+                            _Results[_iDupesSelectedIndex].ResultList.RemoveAt(e.RowIndex);
                     }
                 }
                 else
@@ -87,7 +95,7 @@ namespace ImageSearch
             {
                 if (e.RowIndex == -1) return;
                 _iDupesSelectedIndex = e.RowIndex;
-                GridLoadResults(_Results[e.RowIndex].DupesList, grdResult);
+                GridLoadResults(_Results[e.RowIndex].ResultList, grdResult);
             }
             catch (Exception ex)
             {
@@ -100,9 +108,12 @@ namespace ImageSearch
         {
             try
             {
+                splitContainer.Panel1Collapsed = false;
                 grdDupes.Visible = true;
                 _Results = _IR.FindDuplicates();
                 GridLoadDupes(_Results, grdDupes);
+                grdResult.Rows.Clear();
+                splitContainer.Visible = true;
             }
             catch(Exception ex)
             {
@@ -124,14 +135,36 @@ namespace ImageSearch
             }
         }
 
+        private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            try
+            {
+                ImageSearch.WindowSettings.Record(this, splitContainer);
+            }
+            catch (Exception ex)
+            {
+                Utils.HandleException(ex);
+            }
+        }
+
+        private void frmMain_Load(object sender, EventArgs e)
+        {
+            try
+            {
+                ImageSearch.WindowSettings.Restore(this, splitContainer);
+            }
+            catch (Exception ex)
+            {
+                Utils.HandleException(ex);
+            }
+        }
+
         # endregion
 
         #region SupportMethods
 
-        /// <summary>
-        /// Check to see if any images have already been loaded
-        /// User can choose to cancel or continue and overight
-        /// </summary>
+        /// <summary> Check to see if any images have already been loaded
+        /// User can choose to cancel or continue and overight </summary>
         /// <returns>true = continue and clear loaded images</returns>
         private bool CheckForLoadedImages()
         {
@@ -150,36 +183,34 @@ namespace ImageSearch
             return false;
         }
 
-        /// <summary>
-        /// Load in images from folder selected by the user
-        /// </summary>
+        /// <summary> Load in images from folder selected by the user
         /// <param name="bSubDirectories">If true load from sub directories</param>
         private void LoadImages(bool bSubDirectories)
         {
             if (CheckForLoadedImages())
                 return;
 
-            string[] sFileList = Utils.GetFilesFromFolder(bSubDirectories);
-            if (sFileList.Length == 0) return;
-            sFileList = ImageHelper.ImageUtil.GetValidFiles(sFileList);
-            if (sFileList.Length == 0) return;
-
+            List<string> FileList = Utils.GetFilesFromFolder(bSubDirectories);
+            if (FileList.Count == 0) return;
+            FileList = Utils.GetValidFiles(FileList, Settings.Default.ValidImageExtensions);
+            if (FileList.Count == 0) return;
+            
             ProgressBar.Visible = true;
             ProgressBar.Minimum = 0;
-            ProgressBar.Maximum = sFileList.Length - 1;
+            ProgressBar.Maximum = FileList.Count - 1;
 
             _bBreak = false;
 
-            for (int iCount = 0; iCount < sFileList.Length; iCount++)
+            for (int iCount = 0; iCount < FileList.Count; iCount++)
             {
                 if (_bBreak)
                 {
-                    // Load has been interupted
+                    // Load has been interrupted
                     ImagesLoaded(iCount + 1);
                     return;
                 }
 
-                string sFile = sFileList[iCount];
+                string sFile = FileList[iCount];
                 StatusBarLabel.Text = "Loading - " + sFile + " (Ctrl + Break to cancel)";
                 ProgressBar.Value = iCount;
                 Application.DoEvents();
@@ -190,9 +221,7 @@ namespace ImageSearch
             ImagesLoaded(_IR.Count);
         }
 
-        /// <summary>
-        /// Sets up the UI for when images have been loaded
-        /// </summary>
+        /// <summary> Sets up the UI for when images have been loaded
         /// <param name="iNumLoaded">Total images that have been loaded</param>
         private void ImagesLoaded(int iNumLoaded)
         {
@@ -203,35 +232,35 @@ namespace ImageSearch
             btnSearch.Enabled = true;
         }
 
-        /// <summary>
-        /// Load images into DataGridView
-        /// </summary>
+        /// <summary> Load images into DataGridView </summary>
         private void GridLoadDupes(IEnumerable<Dupes> DupesList, DataGridView grd)
         {
             grd.Rows.Clear();
+            Bitmap bmpThumb;
 
             foreach (Dupes Dupe in DupesList)
             {
-                Bitmap bmp = ImageHelper.ImageUtil.GetThumbnail(100, Dupe.File);
+                bmpThumb = ImageHelper.ImageUtil.GetThumbnail(Properties.Settings.Default.ThumbNailHeight, Dupe.File);
 
-                grd.Rows.Add(new object[] { bmp, Dupe.File });
+                grd.Rows.Add(new object[] { bmpThumb, Dupe.File });
             }
         }
 
-        /// <summary>
-        /// Load search results into DataGridView
-        /// </summary>
+        /// <summary> Load search results into DataGridView </summary>
         private void GridLoadResults(IEnumerable<Result> ResultList, DataGridView grd)
         {
             grd.Rows.Clear();
 
-            Bitmap icon = Properties.Resources.delete_16;
+            Bitmap icon = Properties.Resources.bmpDelete;
+            Bitmap bmpThumb;
 
             foreach (Result Result in ResultList)
             {
-                Bitmap bmp = ImageHelper.ImageUtil.GetThumbnail(100, Result.File);
+                bmpThumb = ImageHelper.ImageUtil.GetThumbnail(Properties.Settings.Default.ThumbNailHeight, Result.File);
 
-                grd.Rows.Add(new object[] { Result.Score, bmp, icon, Result.File });
+                string sScore = Result.Info.Substring(0,Result.Info.IndexOf("/"));
+
+                grd.Rows.Add(new object[] { sScore, bmpThumb, icon, Result.File });
             }
         }
 
@@ -255,7 +284,6 @@ namespace ImageSearch
                     return;
 
                 _IR.Load(openFileDialog.FileName);
-
                 ImagesLoaded(_IR.Count);
             }
             catch (Exception ex)
@@ -320,5 +348,8 @@ namespace ImageSearch
         }
 
 #endregion
+
+
+
     }
 }
