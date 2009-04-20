@@ -1,5 +1,7 @@
 ﻿using System.IO;
+using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 
 namespace ImageSearch
 {
@@ -9,13 +11,13 @@ namespace ImageSearch
         /// Get a list of files from a folder based on the result of a FolderBrowserDialog
         /// </summary>
         /// <param name="bSubDirs">Include sub directories</param>
-        public static string[] GetFilesFromFolder(bool bSubDirs)
+        public static List<string> GetFilesFromFolder(bool bSubDirs)
         {
             FolderBrowserDialog dlgFolder = new FolderBrowserDialog();
             dlgFolder.SelectedPath = "";
 
             if (dlgFolder.ShowDialog() == DialogResult.Cancel)
-                return new string[0];
+                return new List<string>();
 
             string sDir = dlgFolder.SelectedPath;
 
@@ -26,7 +28,14 @@ namespace ImageSearch
             else
                 sFileList = Directory.GetFiles(sDir);
 
-            return sFileList;
+            return new List<string>(sFileList);
+        }
+
+        /// <summary> Restrict a list of files to valid extensions only </summary>
+        /// <param name="sValidExt">Delimited list of file extensions</param>
+        public static List<string> GetValidFiles(List<string> FileList, string sValidExt)
+        {
+            return FileList.FindAll(sFileName => sValidExt.Contains(new FileInfo(sFileName).Extension.ToLower()));
         }
 
         /// <summary>

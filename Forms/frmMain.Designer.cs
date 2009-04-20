@@ -28,7 +28,7 @@ namespace ImageSearch
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btnSearch = new System.Windows.Forms.Button();
             this.grdResult = new System.Windows.Forms.DataGridView();
             this.Score = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -52,16 +52,20 @@ namespace ImageSearch
             this.grdDupes = new System.Windows.Forms.DataGridView();
             this.DupeImage = new System.Windows.Forms.DataGridViewImageColumn();
             this.File = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.splitContainer = new System.Windows.Forms.SplitContainer();
             ((System.ComponentModel.ISupportInitialize)(this.grdResult)).BeginInit();
             this.StatusBar.SuspendLayout();
             this.menuMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdDupes)).BeginInit();
+            this.splitContainer.Panel1.SuspendLayout();
+            this.splitContainer.Panel2.SuspendLayout();
+            this.splitContainer.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnSearch
             // 
             this.btnSearch.Enabled = false;
-            this.btnSearch.Location = new System.Drawing.Point(12, 36);
+            this.btnSearch.Location = new System.Drawing.Point(115, 36);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(75, 23);
             this.btnSearch.TabIndex = 4;
@@ -75,8 +79,6 @@ namespace ImageSearch
             this.grdResult.AllowUserToDeleteRows = false;
             this.grdResult.AllowUserToResizeColumns = false;
             this.grdResult.AllowUserToResizeRows = false;
-            this.grdResult.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Right)));
             this.grdResult.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
             this.grdResult.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.grdResult.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -84,14 +86,15 @@ namespace ImageSearch
             this.Image,
             this.Delete,
             this.FileName});
-            this.grdResult.Location = new System.Drawing.Point(326, 65);
+            this.grdResult.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grdResult.Location = new System.Drawing.Point(0, 0);
             this.grdResult.MultiSelect = false;
             this.grdResult.Name = "grdResult";
             this.grdResult.ReadOnly = true;
             this.grdResult.RowHeadersVisible = false;
             this.grdResult.RowHeadersWidth = 4;
             this.grdResult.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            this.grdResult.Size = new System.Drawing.Size(215, 556);
+            this.grdResult.Size = new System.Drawing.Size(265, 557);
             this.grdResult.TabIndex = 5;
             this.grdResult.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grdResult_CellClick);
             // 
@@ -100,7 +103,7 @@ namespace ImageSearch
             this.Score.HeaderText = "Score";
             this.Score.Name = "Score";
             this.Score.ReadOnly = true;
-            this.Score.Width = 40;
+            this.Score.Width = 80;
             // 
             // Image
             // 
@@ -228,7 +231,7 @@ namespace ImageSearch
             // btnDupes
             // 
             this.btnDupes.Enabled = false;
-            this.btnDupes.Location = new System.Drawing.Point(93, 36);
+            this.btnDupes.Location = new System.Drawing.Point(12, 36);
             this.btnDupes.Name = "btnDupes";
             this.btnDupes.Size = new System.Drawing.Size(97, 23);
             this.btnDupes.TabIndex = 8;
@@ -240,22 +243,20 @@ namespace ImageSearch
             // 
             this.grdDupes.AllowUserToAddRows = false;
             this.grdDupes.AllowUserToDeleteRows = false;
-            this.grdDupes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)));
             this.grdDupes.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
             this.grdDupes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.grdDupes.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.DupeImage,
             this.File});
-            this.grdDupes.Location = new System.Drawing.Point(12, 65);
+            this.grdDupes.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grdDupes.Location = new System.Drawing.Point(0, 0);
             this.grdDupes.MultiSelect = false;
             this.grdDupes.Name = "grdDupes";
             this.grdDupes.ReadOnly = true;
             this.grdDupes.RowHeadersVisible = false;
             this.grdDupes.RowTemplate.DefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.grdDupes.Size = new System.Drawing.Size(281, 556);
+            this.grdDupes.Size = new System.Drawing.Size(258, 557);
             this.grdDupes.TabIndex = 9;
-            this.grdDupes.Visible = false;
             this.grdDupes.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grdDupes_CellClick);
             // 
             // DupeImage
@@ -267,35 +268,60 @@ namespace ImageSearch
             // File
             // 
             this.File.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.File.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.File.DefaultCellStyle = dataGridViewCellStyle2;
             this.File.HeaderText = "File";
             this.File.Name = "File";
             this.File.ReadOnly = true;
             this.File.Width = 150;
+            // 
+            // splitContainer
+            // 
+            this.splitContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitContainer.Location = new System.Drawing.Point(12, 65);
+            this.splitContainer.Name = "splitContainer";
+            // 
+            // splitContainer.Panel1
+            // 
+            this.splitContainer.Panel1.Controls.Add(this.grdDupes);
+            // 
+            // splitContainer.Panel2
+            // 
+            this.splitContainer.Panel2.Controls.Add(this.grdResult);
+            this.splitContainer.Size = new System.Drawing.Size(529, 557);
+            this.splitContainer.SplitterDistance = 258;
+            this.splitContainer.SplitterWidth = 6;
+            this.splitContainer.TabIndex = 12;
+            this.splitContainer.Visible = false;
             // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(553, 659);
-            this.Controls.Add(this.grdDupes);
             this.Controls.Add(this.btnDupes);
             this.Controls.Add(this.StatusBar);
             this.Controls.Add(this.menuMain);
-            this.Controls.Add(this.grdResult);
             this.Controls.Add(this.btnSearch);
+            this.Controls.Add(this.splitContainer);
             this.KeyPreview = true;
             this.MainMenuStrip = this.menuMain;
             this.Name = "frmMain";
             this.Text = "Image Search";
+            this.Load += new System.EventHandler(this.frmMain_Load);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.frmMain_KeyPress);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.grdResult)).EndInit();
             this.StatusBar.ResumeLayout(false);
             this.StatusBar.PerformLayout();
             this.menuMain.ResumeLayout(false);
             this.menuMain.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdDupes)).EndInit();
+            this.splitContainer.Panel1.ResumeLayout(false);
+            this.splitContainer.Panel2.ResumeLayout(false);
+            this.splitContainer.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -322,6 +348,7 @@ namespace ImageSearch
         private System.Windows.Forms.DataGridView grdDupes;
         private System.Windows.Forms.DataGridViewImageColumn DupeImage;
         private System.Windows.Forms.DataGridViewTextBoxColumn File;
+        public System.Windows.Forms.SplitContainer splitContainer;
         private System.Windows.Forms.DataGridViewTextBoxColumn Score;
         private System.Windows.Forms.DataGridViewImageColumn Image;
         private System.Windows.Forms.DataGridViewImageColumn Delete;

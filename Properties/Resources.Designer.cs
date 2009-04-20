@@ -60,9 +60,16 @@ namespace ImageSearch.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap delete_16 {
+        internal static System.Drawing.Bitmap bmpDelete {
             get {
-                object obj = ResourceManager.GetObject("delete_16", resourceCulture);
+                object obj = ResourceManager.GetObject("bmpDelete", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap bmpMissingImage {
+            get {
+                object obj = ResourceManager.GetObject("bmpMissingImage", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
