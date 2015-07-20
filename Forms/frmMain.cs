@@ -215,7 +215,13 @@ namespace ImageSearch
                 ProgressBar.Value = iCount;
                 Application.DoEvents();
 
-                _IR.LoadImage(sFile);
+                try {
+                    _IR.LoadImage(sFile);
+                }
+                catch (Exception ex) {
+                    Utils.HandleException(ex);
+                }
+                
             }
 
             ImagesLoaded(_IR.Count);
