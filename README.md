@@ -4,4 +4,4 @@ Search for images based on colour distribution and edge detection, very fast sea
 
 Ability to store loaded data as xml so you don't have to scan the images each time.
 
-![Image search results](Screenshot.png)
+![Image search results](https://github.com/cookeybear/IR/blob/master/Screenshot.PNG)
